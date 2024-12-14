@@ -1,5 +1,5 @@
 <div align="center">
-<img style="width: 100px;" src="./Doc/ESP32-Jarolift-Controller_Logo.svg"> 
+<img style="width: 100px;" src="./Doc/ESP32_Jarolift_Controller_Logo.svg"> 
 
 <h3 style="text-align: center;">ESP32-Jarolift-Controller</h3>
 </div>
@@ -77,10 +77,10 @@ The WebUI is responsive and also offers a mobile layout.
 
 <img style="display: inline;
   margin-right: 50px;
-  width: 200px;" src="./Doc/webui_mobile_1.png"> 
+  width: 200px;" src="./Doc/webUI_mobile_1.png"> 
 <img style="display: inline;
   margin-right: 50px;
-  width: 200px;" src="./Doc/webui_mobile_2.png"> 
+  width: 200px;" src="./Doc/webUI_mobile_2.png"> 
 
 (Mobile Version)
 
@@ -316,7 +316,7 @@ in addition to mqtt there are more communication options.
 
 There is also a log function with which you can record various messages depending on the filter and display them via the WebUI. This can be useful for your own debugging and also for the further development of the software.
 
-<img src="./Doc/webUI_logger.png" width="75%">
+<img src="./Doc/webUI_Logger.png" width="75%">
 
 ## Telnet
 
