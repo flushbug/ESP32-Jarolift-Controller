@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+  <head>
+    <title>ESP Async Web Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="../css/pico.css" />
+    <link rel="stylesheet" type="text/css" href="../css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../css/icons.css" />
+    <script src="../js/doc.js" defer></script>
+    <script src="../js/lang.js" defer></script>
+    <script src="../js/fun.js" defer></script>
+    <script src="../js/events.js" defer></script>
+    <style></style>
+    <script>
+      function test() {
+        document.getElementById("tab12").classList.add("active");
+        localizePage("de");
+      }
+      setInterval(test, 1000);
+    </script>
+  </head>
+  <body>
+    <!-- Layout -->
+    <header
+      style="
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "></header>
+    <!-- Tab-Content -->
+    <main class="container">
+      <!--SECTION-START-->
+      <div id="tab12" class="tab-content">
+        <div class="grid" style="max-width: 1024px">
+          <div style="width: 100%">
+            <!-- WLAN -->
+            <details>
+              <summary data-i18n="wifi"></summary>
+              <label for="wifi_hostname" data-i18n="hostname"></label>
+              <input type="text" id="cfg_wifi_hostname" name="wifi_hostname" />
+              <label for="wifi_ssid" data-i18n="ssid"></label>
+              <input type="text" id="cfg_wifi_ssid" name="wifi_ssid" />
+              <label for="wifi_password">Passwort</label>
+              <input
+                type="password"
+                id="cfg_wifi_password"
+                name="wifi_password" />
+
+              <div class="section-header">
+                <label for="man_ip_enable" data-i18n="static_ip"></label>
+                <div class="switch-container">
+                  <input
+                    name="man_ip_enable"
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="WIFI_STATIC_IP"
+                    id="cfg_wifi_static_ip" />
+                </div>
+              </div>
+              <br />
+              <div class="WIFI_STATIC_IP">
+                <label for="ip_adr" data-i18n="ip_adr"></label>
+                <input type="text" id="cfg_wifi_ipaddress" name="ip_adr" />
+                <label for="ip_subnet" data-i18n="ip_subnet"></label>
+                <input type="text" id="cfg_wifi_subnet" name="ip_subnet" />
+                <label for="ip_gateway" data-i18n="ip_gateway"></label>
+                <input type="text" id="cfg_wifi_gateway" name="ip_gateway" />
+                <label for="ip_dns" data-i18n="ip_dns"></label>
+                <input type="text" id="cfg_wifi_dns" name="ip_dns" />
+              </div>
+            </details>
+            <hr />
+            <!-- ETHERNET -->
+            <details>
+              <summary>Ethernet (W5500)</summary>
+              <div class="section-header">
+                <label for="eth_enable" data-i18n="activate"></label>
+                <div class="switch-container">
+                  <input
+                    name="eth_enable"
+                    type="checkbox"
+                    role="switch"
+                    id="cfg_eth_enable" />
+                </div>
+              </div>
+              <br />
+              <label for="eth_hostname" data-i18n="hostname"></label>
+              <input type="text" id="cfg_eth_hostname" name="eth_hostname" />
+              <label for="eth_gpio_sck">GPIO CLK</label>
+              <input type="number" id="cfg_eth_gpio_sck" name="eth_gpio_sck" />
+              <label for="eth_gpio_mosi">GPIO MOSI</label>
+              <input
+                type="number"
+                id="cfg_eth_gpio_mosi"
+                name="eth_gpio_mosi" />
+              <label for="eth_gpio_miso">GPIO MISO</label>
+              <input
+                type="number"
+                id="cfg_eth_gpio_miso"
+                name="eth_gpio_miso" />
+              <label for="eth_gpio_cs">GPIO CS</label>
+              <input type="number" id="cfg_eth_gpio_cs" name="eth_gpio_cs" />
+              <label for="eth_gpio_irq">GPIO INT</label>
+              <input type="number" id="cfg_eth_gpio_irq" name="eth_gpio_irq" />
+              <label for="eth_gpio_rst">GPIO RST</label>
+              <input type="number" id="cfg_eth_gpio_rst" name="eth_gpio_rst" />
+              <div class="section-header">
+                <label for="man_ip_enable" data-i18n="static_ip"></label>
+                <div class="switch-container">
+                  <input
+                    name="man_ip_enable"
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="ETH_STATIC_IP"
+                    id="cfg_eth_static_ip" />
+                </div>
+              </div>
+              <br />
+              <div class="ETH_STATIC_IP">
+                <label for="ip_adr" data-i18n="ip_adr"></label>
+                <input type="text" id="cfg_eth_ipaddress" name="ip_adr" />
+                <label for="ip_subnet" data-i18n="ip_subnet"></label>
+                <input type="text" id="cfg_eth_subnet" name="ip_subnet" />
+                <label for="ip_gateway" data-i18n="ip_gateway"></label>
+                <input type="text" id="cfg_eth_gateway" name="ip_gateway" />
+                <label for="ip_dns" data-i18n="ip_dns"></label>
+                <input type="text" id="cfg_eth_dns" name="ip_dns" />
+              </div>
+            </details>
+            <hr />
+            <!-- Authentication -->
+            <details>
+              <summary data-i18n="access"></summary>
+              <div class="section-header">
+                <label for="auth_enable" data-i18n="activate"></label>
+                <div class="switch-container">
+                  <input
+                    name="auth_enable"
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="OPT_AUTH"
+                    id="cfg_auth_enable" />
+                </div>
+              </div>
+              <br />
+              <label for="auth_user" data-i18n="user"></label>
+              <input type="text" id="cfg_auth_user" name="auth_user" />
+              <label for="auth_passw" data-i18n="password"></label>
+              <input type="password" id="cfg_auth_password" name="auth_passw" />
+            </details>
+            <hr />
+            <!-- NTP-Server -->
+            <details>
+              <summary data-i18n="ntp"></summary>
+              <div class="section-header">
+                <label for="ntp_enable" data-i18n="activate"></label>
+                <div class="switch-container">
+                  <input
+                    name="ntp_enable"
+                    type="checkbox"
+                    role="switch"
+                    id="cfg_ntp_enable" />
+                </div>
+              </div>
+              <br />
+              <label for="ntp_server" data-i18n="server"></label>
+              <input type="text" id="cfg_ntp_server" name="ntp_server" />
+              <div class="leftright">
+                <label for="time_zone" data-i18n="ntp_tz"></label>
+                <button
+                  id="p12_ntp_open_dialog_btn"
+                  class="i_help"
+                  style="
+                    height: 30px;
+                    background-color: transparent;
+                    border: none;
+                  "></button>
+              </div>
+              <input type="text" id="cfg_ntp_tz" name="time_zone" />
+            </details>
+            <!-- Dialog OPEN-NTP-HELP -->
+            <dialog id="p12_ntp_dialog">
+              <article>
+                <div id="p12_ntp_help_output"></div>
+                <div class="dash-footer">
+                  <button
+                    id="p12_ntp_close_dialog_btn"
+                    data-i18n="close"
+                    style="width: 75%"></button>
+                </div>
+              </article>
+            </dialog>
+            <hr />
+            <!-- MQTT -->
+            <details>
+              <summary data-i18n="mqtt"></summary>
+              <div class="section-header">
+                <label for="mqtt_enable" data-i18n="activate"></label>
+                <div class="switch-container">
+                  <input
+                    name="mqtt_enable"
+                    type="checkbox"
+                    role="switch"
+                    id="cfg_mqtt_enable" />
+                </div>
+              </div>
+              <div class="section-header">
+                <label for="mqtt_ha_enable">Home Assistant</label>
+                <input
+                  name="mqtt_ha_enable"
+                  type="checkbox"
+                  role="switch"
+                  id="cfg_mqtt_ha_enable" />
+              </div>
+              <br />
+              <label for="mqtt_server" data-i18n="server"></label>
+              <input type="text" id="cfg_mqtt_server" name="mqtt_server" />
+              <label for="mqtt_port" data-i18n="port"></label>
+              <input type="text" id="cfg_mqtt_port" name="mqtt_port" />
+              <label for="mqtt_topic" data-i18n="topic"></label>
+              <input type="text" id="cfg_mqtt_topic" name="mqtt_topic" />
+              <label for="mqtt_user" data-i18n="user"></label>
+              <input type="text" id="cfg_mqtt_user" name="mqtt_user" />
+              <label for="mqtt_password" data-i18n="password"></label>
+              <input
+                type="password"
+                id="cfg_mqtt_password"
+                name="mqtt_password" />
+              <label for="mqtt_ha_topic">Home Assistant Topic</label>
+              <input
+                type="text"
+                id="cfg_mqtt_ha_topic"
+                placeholder="homeassistant"
+                name="mqtt_ha_topic" />
+              <label for="mqtt_ha_device">Home Assistant Device Name</label>
+              <input
+                type="text"
+                id="cfg_mqtt_ha_device"
+                placeholder="jarolift"
+                name="mqtt_ha_device" />
+            </details>
+            <hr />
+            <!-- Hardware -->
+            <details>
+              <summary data-i18n="gpio"></summary>
+              <br />
+              <label for="gdo0">GDO0</label>
+              <input
+                class="num-input"
+                name="gdo0"
+                type="number"
+                id="cfg_gpio_gdo0"
+                placeholder="-1 to disable" />
+              <label for="gdo2">GDO2</label>
+              <input
+                class="num-input"
+                name="gdo2"
+                type="number"
+                id="cfg_gpio_gdo2"
+                placeholder="-1 to disable" />
+              <label for="sck">SCK</label>
+              <input
+                class="num-input"
+                name="sck"
+                type="number"
+                id="cfg_gpio_sck"
+                placeholder="-1 to disable" />
+              <label for="miso">MISO</label>
+              <input
+                class="num-input"
+                name="miso"
+                type="number"
+                id="cfg_gpio_miso"
+                placeholder="-1 to disable" />
+              <label for="mosi">MOSI</label>
+              <input
+                class="num-input"
+                name="mosi"
+                type="number"
+                id="cfg_gpio_mosi"
+                placeholder="-1 to disable" />
+              <label for="cs">CS</label>
+              <input
+                class="num-input"
+                name="cs"
+                type="number"
+                id="cfg_gpio_cs"
+                placeholder="-1 to disable" />
+              <label for="led_setup" data-i18n="led_setup"></label>
+              <input
+                class="num-input"
+                name="led_setup"
+                type="number"
+                id="cfg_gpio_led_setup"
+                placeholder="-1 to disable" />
+            </details>
+            <hr />
+            <!-- JAROLIFT -->
+            <details>
+              <summary>JAROLIFT</summary>
+              <div class="section-header">
+                <label for="learn_mode" data-i18n="learn_mode"></label>
+                <div class="switch-container">
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    id="cfg_jaro_learn_mode" />
+                </div>
+              </div>
+              <div class="info-box">
+                <div class="info-icon">&#9432;</div>
+                <div class="info-text" data-i18n="info_leanmode"></div>
+              </div>
+              <br />
+              <label for="master_MSB">master MSB (HEX-Format)</label>
+              <div class="row">
+                <input
+                  name="master_MSB"
+                  type="text"
+                  data-type="hex"
+                  data-length="8"
+                  id="cfg_jaro_masterMSB"
+                  oninput="validateHex(this)"
+                  pattern="[0-9a-fA-F]{1,8}"
+                  title="Enter up to 8 HEX digits"
+                  maxlength="8"
+                  onblur="formatHex(this)"
+                  disabled />
+                <button
+                  id="editBtn"
+                  onclick="toggleEdit(this, 'cfg_jaro_masterMSB')">
+                  Edit
+                </button>
+              </div>
+              <label for="master_LSB">master LSB (HEX-Format)</label>
+              <div class="row">
+                <input
+                  name="master_LSB"
+                  type="text"
+                  data-type="hex"
+                  data-length="8"
+                  id="cfg_jaro_masterLSB"
+                  oninput="validateHex(this)"
+                  pattern="[0-9a-fA-F]{1,8}"
+                  title="Enter up to 8 HEX digits"
+                  maxlength="8"
+                  onblur="formatHex(this)"
+                  disabled />
+                <button
+                  id="editBtn"
+                  onclick="toggleEdit(this, 'cfg_jaro_masterLSB')">
+                  Edit
+                </button>
+              </div>
+              <br />
+              <label for="serial" data-i18n="serial_nr++ (HEX-Format)"></label>
+              <div class="row">
+                <input
+                  name="serial"
+                  type="text"
+                  data-type="hex"
+                  data-length="6"
+                  id="cfg_jaro_serial"
+                  oninput="validateHex(this)"
+                  pattern="[0-9a-fA-F]{1,6}"
+                  title="Enter up to 6 HEX digits"
+                  maxlength="6"
+                  onblur="formatHex(this)"
+                  disabled />
+                <button
+                  id="editBtn"
+                  onclick="toggleEdit(this, 'cfg_jaro_serial')">
+                  Edit
+                </button>
+              </div>
+              <div class="info-box">
+                <div class="info-icon">&#9432;</div>
+                <div class="info-text" data-i18n="info_serial"></div>
+              </div>
+              <br />
+              <label for="devcnt">Device Counter</label>
+              <div class="row">
+                <input
+                  name="devcnt"
+                  type="number"
+                  id="p12_jaro_devcnt"
+                  disabled />
+                <button
+                  id="editBtn"
+                  onclick="toggleEdit(this, 'p12_jaro_devcnt')">
+                  Edit
+                </button>
+              </div>
+              <div class="info-box">
+                <div class="info-icon">&#9432;</div>
+                <div class="info-text" data-i18n="info_devcnt"></div>
+              </div>
+              <br />
+            </details>
+            <hr />
+            <!-- Shutter 1-16 -->
+            <details>
+              <summary data-i18n="shutter"></summary>
+              <br />
+              <div class="row">
+                <label for="shutter1" data-i18n="channel++ 1"></label>
+                <input
+                  name="shutter1"
+                  type="text"
+                  id="cfg_jaro_ch_name_0"
+                  data-sync="p01_jaro_ch_name_0"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_0" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_0" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH1"
+                    id="cfg_jaro_ch_enable_0" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter2" data-i18n="channel++ 2"></label>
+                <input
+                  name="shutter2"
+                  type="text"
+                  id="cfg_jaro_ch_name_1"
+                  data-sync="p01_jaro_ch_name_1"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_1" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_1" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH2"
+                    id="cfg_jaro_ch_enable_1" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter3" data-i18n="channel++ 3"></label>
+                <input
+                  name="shutter3"
+                  type="text"
+                  id="cfg_jaro_ch_name_2"
+                  data-sync="p01_jaro_ch_name_2"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_2" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_2" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH3"
+                    id="cfg_jaro_ch_enable_2" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter4" data-i18n="channel++ 4"></label>
+                <input
+                  name="shutter4"
+                  type="text"
+                  id="cfg_jaro_ch_name_3"
+                  data-sync="p01_jaro_ch_name_3"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_3" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_3" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH4"
+                    id="cfg_jaro_ch_enable_3" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter5" data-i18n="channel++ 5"></label>
+                <input
+                  name="shutter5"
+                  type="text"
+                  id="cfg_jaro_ch_name_4"
+                  data-sync="p01_jaro_ch_name_4"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_4" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_4" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH5"
+                    id="cfg_jaro_ch_enable_4" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter6" data-i18n="channel++ 6"></label>
+                <input
+                  name="shutter6"
+                  type="text"
+                  id="cfg_jaro_ch_name_5"
+                  data-sync="p01_jaro_ch_name_5"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_5" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_5" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH6"
+                    id="cfg_jaro_ch_enable_5" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter7" data-i18n="channel++ 7"></label>
+                <input
+                  name="shutter7"
+                  type="text"
+                  id="cfg_jaro_ch_name_6"
+                  data-sync="p01_jaro_ch_name_6"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_6" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_6" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH7"
+                    id="cfg_jaro_ch_enable_6" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter8" data-i18n="channel++ 8"></label>
+                <input
+                  name="shutter8"
+                  type="text"
+                  id="cfg_jaro_ch_name_7"
+                  data-sync="p01_jaro_ch_name_7"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_7" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_7" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH8"
+                    id="cfg_jaro_ch_enable_7" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter9" data-i18n="channel++ 9"></label>
+                <input
+                  name="shutter9"
+                  type="text"
+                  id="cfg_jaro_ch_name_8"
+                  data-sync="p01_jaro_ch_name_8"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_8" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_8" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH9"
+                    id="cfg_jaro_ch_enable_8" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter10" data-i18n="channel++ 10"></label>
+                <input
+                  name="shutter10"
+                  type="text"
+                  id="cfg_jaro_ch_name_9"
+                  data-sync="p01_jaro_ch_name_9"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_9" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_9" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH10"
+                    id="cfg_jaro_ch_enable_9" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter11" data-i18n="channel++ 11"></label>
+                <input
+                  name="shutter11"
+                  type="text"
+                  id="cfg_jaro_ch_name_10"
+                  data-sync="p01_jaro_ch_name_10"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_10" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_10" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH11"
+                    id="cfg_jaro_ch_enable_10" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter12" data-i18n="channel++ 12"></label>
+                <input
+                  name="shutter12"
+                  type="text"
+                  id="cfg_jaro_ch_name_11"
+                  data-sync="p01_jaro_ch_name_11"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_11" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_11" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH12"
+                    id="cfg_jaro_ch_enable_11" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter13" data-i18n="channel++ 13"></label>
+                <input
+                  name="shutter13"
+                  type="text"
+                  id="cfg_jaro_ch_name_12"
+                  data-sync="p01_jaro_ch_name_12"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_12" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_12" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH13"
+                    id="cfg_jaro_ch_enable_12" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter14" data-i18n="channel++ 14"></label>
+                <input
+                  name="shutter14"
+                  type="text"
+                  id="cfg_jaro_ch_name_13"
+                  data-sync="p01_jaro_ch_name_13"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_13" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_13" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH14"
+                    id="cfg_jaro_ch_enable_13" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter15" data-i18n="channel++ 15"></label>
+                <input
+                  name="shutter15"
+                  type="text"
+                  id="cfg_jaro_ch_name_14"
+                  data-sync="p01_jaro_ch_name_14"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_14" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_14" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH15"
+                    id="cfg_jaro_ch_enable_14" />
+                </div>
+              </div>
+              <div class="row">
+                <label for="shutter16" data-i18n="channel++ 16"></label>
+                <input
+                  name="shutter16"
+                  type="text"
+                  id="cfg_jaro_ch_name_15"
+                  data-sync="p01_jaro_ch_name_15"
+                  placeholder="name" />
+                <div>
+                  <button id="p12_setshade_15" data-i18n="set_shade"></button>
+                </div>
+                <div>
+                  <button id="p12_learn_15" data-i18n="learn"></button>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    hideOpt="CH16"
+                    id="cfg_jaro_ch_enable_15" />
+                </div>
+              </div>
+            </details>
+            <hr />
+            <!-- Language -->
+            <details>
+              <summary data-i18n="language"></summary>
+              <select id="cfg_lang">
+                <option value="0" data-i18n="german"></option>
+                <option value="1" data-i18n="english"></option>
+              </select>
+            </details>
+            <hr />
+            <!-- Buttons -->
+            <button
+              id="p12_btn_restart"
+              data-i18n="restart"
+              style="width: 100%; margin-bottom: 10px"></button>
+            <br />
+            <br />
+          </div>
+        </div>
+      </div>
+      <!--SECTION-END-->
+    </main>
+    <!-- Footer -->
+    <footer
+      style="
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+      <div id="status">STATUS</div>
+    </footer>
+  </body>
+</html>
