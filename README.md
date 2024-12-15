@@ -119,6 +119,14 @@ a standard SPI GPIO configuration is:
 | MISO  | 19   |
 | CS    | 5    |
 
+![hardware_1](/Doc/hw_1.png)  
+
+example with ESP32-Mini and CC1101
+
+![hardware_2](/Doc/hw_2.png)  
+
+example for direct replacement with ESP32-Mini and the custom board from M. Maywald
+
 ## Optional: Ethernet Module W5500
 
 It is also possible to connect a W5500 Ethernet module to the Board or a generic ESP32.  

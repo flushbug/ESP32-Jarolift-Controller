@@ -8,11 +8,11 @@ assignees: ''
 
 ## ENGLISH:
 **Please do not open an issue for general questions or feature requests.**  
-Use the [Discussions](https://github.com/ESP32-Jarolift-Controller/discussions) section instead.  
+Use the [Discussions](https://github.com/dewenni/ESP32-Jarolift-Controller/discussions) section instead.  
 
 ---
 
 ## DEUTSCH:
 **Bitte öffne kein Issue für allgemeine Fragen oder Feature-Anfragen.**  
-Verwende stattdessen den Bereich [Diskussionen](https://github.com/ESP32-Jarolift-Controller/discussions).  
+Verwende stattdessen den Bereich [Diskussionen](https://github.com/dewenni/ESP32-Jarolift-Controller/discussions).  
 
