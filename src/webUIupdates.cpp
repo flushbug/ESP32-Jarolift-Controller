@@ -26,7 +26,7 @@ static muTimer gitVersionTimer2 = muTimer(); // timer to refresh other values
 
 static char tmpMessage[300] = {'\0'};
 static bool refreshRequest = false;
-
+static uint16_t devCntNew, devCntOld = 0;
 static JsonDocument jsonDoc;
 static bool jsonDataToSend = false;
 
@@ -176,7 +176,11 @@ void updateSystemInfoElements() {
   addJson(jsonDoc, "p09_uptime", uptimeStr);
 
   // Device Counter
-  addJson(jsonDoc, "p12_jaro_devcnt", cmd_getDevCnt());
+  devCntNew = jaroGetDevCnt();
+  if (devCntNew != devCntOld) {
+    devCntOld = devCntNew;
+    addJson(jsonDoc, "p12_jaro_devcnt", devCntNew);
+  }
 
   updateWebJSON(jsonDoc);
 }
@@ -203,6 +207,8 @@ void updateSystemInfoElementsStatic() {
   char restartReason[64];
   getRestartReason(restartReason, sizeof(restartReason));
   addJson(jsonDoc, "p09_restart_reason", restartReason);
+
+  addJson(jsonDoc, "p12_jaro_devcnt", jaroGetDevCnt());
 
   updateWebJSON(jsonDoc);
 }

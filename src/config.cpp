@@ -97,7 +97,7 @@ void configInitValue() {
   memset((void *)&config, 0, sizeof(config));
 
   // Logger
-  config.log.level = ESP_LOG_DEBUG;
+  config.log.level = 4;
 
   // WiFi
   snprintf(config.wifi.hostname, sizeof(config.wifi.hostname), "ESP32-Jarolift");

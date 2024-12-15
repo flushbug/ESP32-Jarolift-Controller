@@ -6,7 +6,7 @@ General Configuration
 --------------------------------------------------------------------------------*/
 #define VERSION "v1.0.0" // internal program version
 
-#define WIFI_RECONNECT 10000 // Delay between wifi reconnection tries
+#define WIFI_RECONNECT 30000 // Delay between wifi reconnection tries
 #define MQTT_RECONNECT 10000 // Delay between mqtt reconnection tries
 
 struct s_cfg_jaro {

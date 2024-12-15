@@ -1,9 +1,8 @@
 <div align="center">
-<img style="width: 100px;" src="./Doc/ESP32_Jarolift_Controller_Logo.svg"> 
+<img style="width: 100px;" src="./Doc/ESP32_Jarolift_Controller_Logo.svg">
 
 <h3 style="text-align: center;">ESP32-Jarolift-Controller</h3>
 </div>
-
 
 -----
 
@@ -29,7 +28,6 @@ And if you'd like to support my work, you can also<p>
 
 [![Sponsor](https://img.shields.io/badge/Sponsor%20me%20on-GitHub-%23EA4AAA.svg?style=for-the-badge&logo=github)](https://github.com/sponsors/dewenni)
 
-
 </div>
 
 -----
@@ -52,14 +50,12 @@ Automatic device discovery in HomeAssistant through MQTT Auto Discovery for seam
 - Support for up to 16 Roller Shutters:  
 Control up to 16 roller shutters with ease, all managed through the WebUI and MQTT.
 
-
 Experimental version.
 Use at your own risk. For private/educational use only. (Keeloq algorithm licensed only to TI Microcontrollers)
 This project is not affiliated in any way with the vendor of the Jarolift components.
 Jarolift is a Trademark of Schöneberger Rolladenfabrik GmbH & Co. KG
 
 This version is for an ESP32 and is based on ideas and code from [madmartin/Jarolift_MQTT](https://github.com/madmartin/Jarolift_MQTT).
-
 
 ### Project Homepage, Forum and Author
 
@@ -69,7 +65,6 @@ The project home is here: [Project Home](http://www.bastelbudenbuben.de/2017/04/
 
 -----
 
-
 ![weubui_dash](Doc/webUI_1.png)
 (Desktop Version)
 
@@ -77,10 +72,10 @@ The WebUI is responsive and also offers a mobile layout.
 
 <img style="display: inline;
   margin-right: 50px;
-  width: 200px;" src="./Doc/webUI_mobile_1.png"> 
+  width: 200px;" src="./Doc/webUI_mobile_1.png">
 <img style="display: inline;
   margin-right: 50px;
-  width: 200px;" src="./Doc/webUI_mobile_2.png"> 
+  width: 200px;" src="./Doc/webUI_mobile_2.png">
 
 (Mobile Version)
 
@@ -99,6 +94,7 @@ The WebUI is responsive and also offers a mobile layout.
   - [Setup-Mode](#setup-mode)
   - [Configuration](#configuration)
   - [Filemanager](#filemanager)
+  - [Migration](#migration)
 - [MQTT](#mqtt)
   - [Commands](#commands)
   - [Home Assistant](#home-assistant)
@@ -198,7 +194,7 @@ The "Setup Mode" will also activated if there is no wifi connection configured.
 If the ESP goes into "Setup Mode", it will automatically create a own network access point with ssid  
 📶 `"ESP32_Jarolift"`  
 After you are connected to this network, you can open the webUI on ip-address  
-**"http://192.168.4.1"**
+**"<http://192.168.4.1>"**
 
 ## Configuration
 
@@ -237,7 +233,6 @@ The language take effect on the webUI and also on the mqtt messages!
 > [!IMPORTANT]
 > Changes to GPIO or Jarolift settings require a restart!
 
-
 ![weubui-settings](Doc/webUI_settings.png)
 
 ## Filemanager
@@ -246,6 +241,39 @@ there is also a builtin file manager to open (show), download (export) and uploa
 The configuration is stored in the ```config.json``` file. To backup and restore the configuration you can download and upload this file.
 
 ![filemanager](/Doc/webUI_tools.png)
+
+## Migration
+
+It is possible to migrate from a latest version of [madmartin/Jarolift_MQTT](https://github.com/madmartin/Jarolift_MQTT) to this project.
+
+#### Get a working Setup of this Project
+
+- get a working version of this project up and running
+- set the right GPIO settings for CC1101
+- set the Master Keys
+- set the Log-Level in the Logger of the WebUI to "Debug"
+
+#### Get the right serial number
+
+- execute a shutter UP command of "old" Setup `(madmartin/Jarolift_MQTT)` for **channel 0!**.
+- now you should see a debug message of this command in the Logger of the WebUI.  
+It contains a message with `D (APP-JARO): (INF1) serial: 0xaabbcc00,`  
+The first 6 digits are the serial number that you have to use for this project (in this example: **aabbcc**). this should be the same as configured in the WebUI of the "old" setup, but now we are sure to have the right one.
+- set this serial in the WebUI of this project
+
+#### Get the right Device Counter
+
+- read the actual device counter of the "old" setup from the System Page of the WebUI.
+- set the same Device Counter value in the settings of this project.
+
+#### define the Shutter
+
+- define the same shutter as in the "old" setup and activate them.
+
+finished!  
+now restart the ESP and test it.  
+After restarting, first check whether the device counter has been read correctly from the EEPROM. Only continue testing if this is the case.
+If everything done correct, all shutters should work like before. If not, some setting is wrong or you haven´t used the latest version of `(madmartin/Jarolift_MQTT)`. In that case I would prefer to set a new Serial number, reset the Device Counter und learn the shutter again.
 
 -----
 
@@ -293,14 +321,17 @@ payload:    {SHADE, 3}
 
 ```
 
+> [!NOTE]
+> < ../ > is the placeholder for the MQTT topic which is specified in the settings.
+
 ## Home Assistant
 
 MQTT discovery for Home Assistant makes it easy to get all values in Home Assistant.
 The configured shutters will automatically visible as mqtt device in Home Assistant if HomeAssistant is enabled.
 
-see also the official documentation: https://www.home-assistant.io/integrations/mqtt/#discovery-messages
+see also the official documentation: <https://www.home-assistant.io/integrations/mqtt/#discovery-messages>
 
-<img src="Doc/webUI_ha2.png" alt="mqtt_ha1" width="75%"> 
+<img src="Doc/webUI_ha2.png" alt="mqtt_ha1" width="75%">
 
 In the mqtt settings you can activate the discovery function and also set the mqtt discovery topic and the device name for Home Assistant  
 <img src="Doc/webUI_ha1.png" alt="mqtt_ha1" width="50%">
@@ -310,7 +341,6 @@ In the mqtt settings you can activate the discovery function and also set the mq
 # Optional Communication
 
 in addition to mqtt there are more communication options.
-
 
 ## WebUI-Logger
 
@@ -325,9 +355,8 @@ The interface offers several commands to read out information and send commands.
 An overview of the commands can be called up using the "help" command.
 To connect, a simple Telnet connection can be started via the corresponding IP address of the ESP.
 
-Example: 
-```
-> telnet 192.168.178.193
-```
+Example:
+
+`> telnet 192.168.178.193`
 
 <img src="./Doc/telnet.png" width="75%">

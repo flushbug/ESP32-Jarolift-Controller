@@ -208,7 +208,7 @@ void webCallback(const char *elementId, const char *value) {
   if (strcmp(elementId, "cfg_mqtt_ha_device") == 0) {
     snprintf(config.mqtt.ha_device, sizeof(config.mqtt.ha_device), "%s", value);
   }
-  
+
   // Hardware
   if (strcmp(elementId, "cfg_gpio_gdo0") == 0) {
     config.gpio.gdo0 = strtoul(value, NULL, 10);
@@ -236,19 +236,22 @@ void webCallback(const char *elementId, const char *value) {
   // Jarolift settings
   if (strcmp(elementId, "cfg_jaro_masterMSB") == 0) {
     config.jaro.masterMSB = strtoul(value, NULL, 16);
+    jaroCmdReInit();
   }
   if (strcmp(elementId, "cfg_jaro_masterLSB") == 0) {
     config.jaro.masterLSB = strtoul(value, NULL, 16);
+    jaroCmdReInit();
   }
   if (strcmp(elementId, "cfg_jaro_serial") == 0) {
     config.jaro.serial = strtoul(value, NULL, 16);
+    jaroCmdReInit();
   }
   if (strcmp(elementId, "cfg_jaro_learn_mode") == 0) {
     config.jaro.learn_mode = stringToBool(value);
+    jaroCmdReInit();
   }
   if (strcmp(elementId, "p12_jaro_devcnt") == 0) {
-    cmd_setDevCnt(strtoul(value, NULL, 10));
-    MY_LOGI(TAG, "cmd set device counter to: %ld", strtoul(value, NULL, 10));
+    jaroCmdSetDevCnt(strtoul(value, NULL, 10));
   }
 
   // Shutter 1-16
@@ -279,28 +282,28 @@ void webCallback(const char *elementId, const char *value) {
       snprintf(config.jaro.ch_name[i], sizeof(config.jaro.ch_name[i]), "%s", value);
     }
     if (strcmp(elementId, setShadeId) == 0) {
-      cmd_setShade(i);
+      jaroCmdSetShade(i);
       MY_LOGI(TAG, "cmd set shade - channel %i", i + 1);
     }
     if (strcmp(elementId, learnId) == 0) {
-      cmd_learn(i);
+      jaroCmdLearn(i);
       MY_LOGI(TAG, "cmd learn - channel %i", i + 1);
     }
     if (strcmp(elementId, cmdUpId) == 0) {
       MY_LOGI(TAG, "cmd up - channel %i", i + 1);
-      cmd_up(i);
+      jaroCmdUp(i);
     }
     if (strcmp(elementId, cmdStopId) == 0) {
       MY_LOGI(TAG, "cmd stop - channel %i", i + 1);
-      cmd_stop(i);
+      jaroCmdStop(i);
     }
     if (strcmp(elementId, cmdDownId) == 0) {
       MY_LOGI(TAG, "cmd down - channel %i", i + 1);
-      cmd_down(i);
+      jaroCmdDown(i);
     }
     if (strcmp(elementId, cmdShadeId) == 0) {
       MY_LOGI(TAG, "cmd shade - channel %i", i + 1);
-      cmd_shade(i);
+      jaroCmdShade(i);
     }
   }
 

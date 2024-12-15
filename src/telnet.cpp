@@ -199,13 +199,13 @@ void cmdShutter(char param[MAX_PAR][MAX_CHAR]) {
     }
   }
   if (!strcmp(param[2], "up")) {
-    cmd_up(channel - 1);
+    jaroCmdUp(channel - 1);
   } else if (!strcmp(param[2], "down")) {
-    cmd_down(channel - 1);
+    jaroCmdDown(channel - 1);
   } else if (!strcmp(param[2], "stop")) {
-    cmd_stop(channel - 1);
+    jaroCmdStop(channel - 1);
   } else if (!strcmp(param[2], "shade")) {
-    cmd_shade(channel - 1);
+    jaroCmdShade(channel - 1);
   } else {
     telnet.println("unknown command");
   }

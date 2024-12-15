@@ -7,7 +7,7 @@
 class JaroliftController {
 private:
   void devcnt_handler(boolean do_increment);
-  uint64_t cmd_get_serial(int channel);
+  uint32_t cmd_get_serial(int channel);
   void radio_tx_frame(int l);
   void radio_tx_group_h();
   void keeloq();
@@ -58,7 +58,7 @@ public:
 
   void setKeys(unsigned long masterMSB, unsigned long masterLSB);
 
-  void setBaseSerial(uint64_t serial);
+  void setBaseSerial(uint32_t serial);
 
   void setDeviceCounter(uint16_t devCnt);
 

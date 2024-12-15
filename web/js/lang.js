@@ -335,8 +335,8 @@ const translations = {
     en: "new learn mode is for receivers newer than 2010, which have a learning sequence of buttons UP+DOWN pressed simultaneously, then press STOP. the old learn method for receivers manufactured before 2010 uses a special LEARN button.",
   },
   info_serial: {
-    de: "Jeder Kanal benötigt eine individuelle Seriennummer. Wenn Sie hier ein neues Seriennummernpräfix eingeben, werden neue Seriennummern für alle Kanäle generiert und der Gerätezähler auf Null gesetzt. ACHTUNG: alle Empfänger müssen danach (erneut) eingelernt werden!",
-    en: "each channel requires an individual serial number. if you enter a new serial number prefix here new serialnumbers for all channels will be generated and the device counter will be set to zero. ATTENTION: all receivers must be learned in after this (again)!",
+    de: "Jeder Kanal benötigt eine individuelle Seriennummer. Wenn Sie hier ein neues Seriennummernpräfix eingeben, ändern sich die Seriennummern für alle Kanäle. ACHTUNG: alle Empfänger müssen danach (erneut) eingelernt werden und der Device Counter muss zurückgesetzt werden!",
+    en: "Each channel requires an individual serial number. If you enter a new serial number prefix here, the serial numbers for all channels will change. ATTENTION: all receivers must then be learned (again) and the device counter must be reset!",
   },
   info_devcnt: {
     de: "Der Zähler wird zusammen mit jedem Datagramm über den Funk gesendet. Er beginnt bei null und wird bei jedem Datagramm inkrementiert. Jeder empfänger hört die empfangenen Datagramme ab und zeichnet den Zähler des Senders auf. Wenn der Zähler des Senders und des Empfängers zu sehr voneinander abweichen, müssen Sie den Empfänger neu anlernen. Um dies zu vermeiden, wenn Sie einen Dongle austauschen (oder wenn ein Update schief geht), können Sie hier einen Zähler ungleich null eingeben. ACHTUNG: lassen Sie die Finger davon, wenn Sie die Wirkung nicht verstehen, Sie riskieren, dass Sie alle Ihre Empfänger (wieder) neu anlernen müssen!",
@@ -353,5 +353,13 @@ const translations = {
   gpio_restart_info: {
     de: "Änderungen an den GPIO Einstellungen benötigen einen Neustart!",
     en: "Changes to GPIO or Jarolift settings require a restart!",
+  },
+  gpio_info: {
+    de: "Beispiel für einen typischen ESP32",
+    en: "example for typical ESP32",
+  },
+  mqtt_info2: {
+    de: "< ../ > ist der Platzhalter für das MQTT Topic welches in den Einstellungen vorgegeben wird.",
+    en: "< ../ > is the placeholder for the MQTT topic which is specified in the settings.",
   },
 };

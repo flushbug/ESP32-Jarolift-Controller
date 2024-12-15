@@ -226,7 +226,7 @@ void mqttCyclic() {
     bootUpMsgDone = true;
     char restartReason[64];
     getRestartReason(restartReason, sizeof(restartReason));
-    MY_LOGI(TAG, "ESP restarted (%s)\n", restartReason);
+    MY_LOGI(TAG, "ESP restarted (%s)", restartReason);
 
     if (config.mqtt.ha_enable) {
       mqttDiscoverySetup(false);
@@ -268,26 +268,31 @@ void processMqttMessage() {
     delay(1000);
     yield();
     ESP.restart();
+    // reconfigure
   } else if (strcasecmp(msgCpy.topic, addTopic("/cmd/reconfigure")) == 0) {
     mqttDiscoverySetup(true);
     yield();
     delay(1000);
     yield();
     mqttDiscoverySetup(false);
-
+    // homeassistant/status
+  } else if (strcmp(msgCpy.topic, "homeassistant/status") == 0) {
+    if (config.mqtt.ha_enable && strcmp(msgCpy.payload, "online") == 0) {
+      mqttDiscoverySetup(false); // send actual discovery configuration
+    }
     // Shutter commands
   } else if (channel != -1) {
     if (channel >= 1 && channel <= 16) {
-      if (strcasecmp(msgCpy.topic, "UP") == 0 || strcasecmp(msgCpy.payload, "OPEN") == 0 || strcmp(msgCpy.payload, "0") == 0) {
-        cmd_up(channel - 1);
+      if (strcasecmp(msgCpy.payload, "UP") == 0 || strcasecmp(msgCpy.payload, "OPEN") == 0 || strcmp(msgCpy.payload, "0") == 0) {
+        jaroCmdUp(channel - 1);
       } else if (strcasecmp(msgCpy.payload, "DOWN") == 0 || strcasecmp(msgCpy.payload, "CLOSE") == 0 || strcmp(msgCpy.payload, "1") == 0) {
-        cmd_down(channel - 1);
+        jaroCmdDown(channel - 1);
       } else if (strcasecmp(msgCpy.payload, "STOP") == 0 || strcmp(msgCpy.payload, "2") == 0) {
-        cmd_stop(channel - 1);
+        jaroCmdStop(channel - 1);
       } else if (strcasecmp(msgCpy.payload, "SHADE") == 0 || strcmp(msgCpy.payload, "3") == 0) {
-        cmd_shade(channel - 1);
+        jaroCmdShade(channel - 1);
       } else if (strcasecmp(msgCpy.payload, "SETSHADE") == 0 || strcmp(msgCpy.payload, "4") == 0) {
-        cmd_setShade(channel - 1);
+        jaroCmdSetShade(channel - 1);
       } else {
         mqttPublish(addTopic("/message"), "invalid shutter cmd", false);
         MY_LOGW(TAG, "invalid shutter cmd");
