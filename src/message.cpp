@@ -94,14 +94,15 @@ void checkHeapStatus() {
  * @return  none
  * *******************************************************************/
 void setLogLevel(uint8_t level) {
-  if (level == 4) {
-    logLevel = ESP_LOG_DEBUG;
-  } else if (level == 3) {
-    logLevel = ESP_LOG_INFO;
+
+  if (level == 1) {
+    logLevel = ESP_LOG_ERROR;
   } else if (level == 2) {
     logLevel = ESP_LOG_WARN;
-  } else if (level == 1) {
-    logLevel = ESP_LOG_ERROR;
+  } else if (level == 3) {
+    logLevel = ESP_LOG_INFO;
+  } else {
+    logLevel = ESP_LOG_DEBUG;
   }
   esp_log_level_set("*", logLevel);
 }

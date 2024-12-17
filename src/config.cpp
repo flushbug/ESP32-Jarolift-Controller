@@ -18,6 +18,7 @@ static const char *TAG = "CFG"; // LOG TAG
 /* P R O T O T Y P E S ********************************************************/
 void configGPIO();
 void configInitValue();
+void checkGPIO();
 
 /**
  * *******************************************************************
@@ -36,8 +37,138 @@ void configSetup() {
 
   // load config from file
   configLoadFromFile();
+  // check GPIO
+  checkGPIO();
   // gpio settings
   configGPIO();
+}
+
+/**
+ * *******************************************************************
+ * @brief   check configured gpio
+ * @param   none
+ * @return  none
+ * *******************************************************************/
+#define MAX_GPIO 20
+void checkGPIO() {
+  short int usedGPIOs[MAX_GPIO];
+  short int usedCount = 0;
+
+  auto isDuplicate = [&usedGPIOs, &usedCount](int gpio) {
+    if (gpio == -1)
+      return false; // -1 ignore
+    for (int i = 0; i < usedCount; ++i) {
+      if (usedGPIOs[i] == gpio) {
+        return true;
+      }
+    }
+    if (usedCount < MAX_GPIO - 1) {
+      usedGPIOs[usedCount++] = gpio;
+    }
+    return false;
+  };
+
+  bool invalidcc1101 = false;
+  bool invalidETH = false;
+
+  if (config.gpio.led_setup == 0) {
+    config.gpio.led_setup = LED_BUILTIN;
+  } else if (isDuplicate(config.gpio.led_setup)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (led_setup)", config.gpio.led_setup);
+  }
+
+  // CC1101 GPIO
+  if (config.gpio.gdo0 == 0) {
+    config.gpio.gdo0 = 21;
+    invalidcc1101 = true;
+  } else if (isDuplicate(config.gpio.gdo0)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (gpio.gdo0)", config.gpio.gdo0);
+  }
+
+  if (config.gpio.gdo2 == 0) {
+    config.gpio.gdo2 = 22;
+    invalidcc1101 = true;
+  } else if (isDuplicate(config.gpio.gdo2)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (gpio.gdo2)", config.gpio.gdo2);
+  }
+
+  if (config.gpio.cs == 0) {
+    config.gpio.cs = 5;
+    invalidcc1101 = true;
+  } else if (isDuplicate(config.gpio.cs)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (gpio.cs)", config.gpio.cs);
+  }
+
+  if (config.gpio.sck == 0) {
+    config.gpio.sck = 18;
+    invalidcc1101 = true;
+  } else if (isDuplicate(config.gpio.sck)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (gpio.sck)", config.gpio.sck);
+  }
+
+  if (config.gpio.miso == 0) {
+    config.gpio.miso = 19;
+    invalidcc1101 = true;
+  } else if (isDuplicate(config.gpio.miso)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (gpio.miso)", config.gpio.miso);
+  }
+
+  if (config.gpio.mosi == 0) {
+    config.gpio.mosi = 23;
+    invalidcc1101 = true;
+  } else if (isDuplicate(config.gpio.mosi)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (gpio.mosi)", config.gpio.mosi);
+  }
+
+  // Ethernet GPIO
+  if (config.eth.gpio_cs == 0) {
+    config.eth.gpio_cs = -1;
+    invalidETH = true;
+  } else if (isDuplicate(config.eth.gpio_cs)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (eth.gpio_cs)", config.eth.gpio_cs);
+  }
+
+  if (config.eth.gpio_irq == 0) {
+    config.eth.gpio_irq = -1;
+    invalidETH = true;
+  } else if (isDuplicate(config.eth.gpio_irq)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (eth.gpio_irq)", config.eth.gpio_irq);
+  }
+
+  if (config.eth.gpio_miso == 0) {
+    config.eth.gpio_miso = -1;
+    invalidETH = true;
+  } else if (isDuplicate(config.eth.gpio_miso)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (eth.gpio_miso)", config.eth.gpio_miso);
+  }
+
+  if (config.eth.gpio_mosi == 0) {
+    config.eth.gpio_mosi = -1;
+    invalidETH = true;
+  } else if (isDuplicate(config.eth.gpio_mosi)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (eth.gpio_mosi)", config.eth.gpio_mosi);
+  }
+
+  if (config.eth.gpio_rst == 0) {
+    config.eth.gpio_rst = -1;
+    invalidETH = true;
+  } else if (isDuplicate(config.eth.gpio_rst)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (eth.gpio_rst)", config.eth.gpio_rst);
+  }
+
+  if (config.eth.gpio_sck == 0) {
+    config.eth.gpio_sck = -1;
+    invalidETH = true;
+  } else if (isDuplicate(config.eth.gpio_sck)) {
+    MY_LOGE(TAG, "GPIO %d is used multiple times (eth.gpio_sck)", config.eth.gpio_sck);
+  }
+
+  if (config.eth.enable && invalidETH) {
+    MY_LOGE(TAG, "invalid GPIO settings for Ethernet");
+  }
+  if (invalidcc1101) {
+    MY_LOGE(TAG, "invalid GPIO settings for CC1101");
+  }
 }
 
 /**
@@ -194,6 +325,10 @@ void configSaveToFile() {
   doc["jaro"]["masterMSB"] = config.jaro.masterMSB;
   doc["jaro"]["masterLSB"] = config.jaro.masterLSB;
   doc["jaro"]["serial"] = config.jaro.serial;
+
+  if (config.jaro.learn_mode == 0) {
+    config.jaro.learn_mode = 4; // ESP_LOG_DEBUG
+  }
   doc["jaro"]["learn_mode"] = config.jaro.learn_mode;
 
   JsonArray ch_enable = doc["jaro"]["ch_enable"].to<JsonArray>();
@@ -329,6 +464,10 @@ void configLoadFromFile() {
   file.close();     // Close the file (Curiously, File's destructor doesn't close the file)
   configHashInit(); // init hash value
 
+  // check log level
+  if (config.jaro.learn_mode == 0) {
+    config.jaro.learn_mode = 4; // ESP_LOG_DEBUG
+  }
   setLogLevel(config.log.level);
 }
 
