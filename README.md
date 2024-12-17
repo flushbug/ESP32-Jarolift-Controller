@@ -110,14 +110,20 @@ The WebUI is responsive and also offers a mobile layout.
 
 a standard SPI GPIO configuration is:
 
-| Signal| GPIO |
-|-------|------|
-| GD0   | 21   |
-| GD2   | 22   |
-| CLK   | 18   |
-| MOSI  | 23   |
-| MISO  | 19   |
-| CS    | 5    |
+|CC1101-PIN | CC1101-Signal| ESP-GPIO|
+|-----------|--------------|---------|
+|2          | VCC          | --      |
+|1          | GND          | --      |
+|3          | GD0          | 21      |
+|8          | GD2          | 22      |
+|5          | SCK/CLK      | 18      |
+|6          | MOSI         | 23      |
+|7          | MISO         | 19      |
+|4          | CS(N)        | 5       |
+
+![fritzing1](/Doc/ESP32_CC1101_Steckplatine.png)  
+
+![fritzing2](/Doc/ESP32_CC1101_Schaltplan.png)  
 
 ![hardware_1](/Doc/hw_1.png)  
 
