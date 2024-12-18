@@ -94,7 +94,10 @@ void CC1101::setGPIO(int8_t sck, int8_t miso, int8_t mosi, int8_t ss, int8_t gdo
  *
  * check if CC1101 is connected
  */
-bool CC1101::connected(void) { return readStatusReg(CC1101_MARCSTATE) != 0; }
+bool CC1101::connected(void) {
+  uint8_t marcstate = readStatusReg(CC1101_MARCSTATE);
+  return (marcstate != 0 && marcstate != 0xff);
+}
 
 /**
  * wakeUp

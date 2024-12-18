@@ -1,8 +1,8 @@
-# v1.1.0
+# v1.1.1
 
 ## what's new
 
-minor changes and updates!
+this is a minor bug fix version!
 
 this project is still in an early phase.
 If you like this project, feel free to push the **[Star ⭐️]** button and click **[Watch 👁]** to stay updated.
@@ -11,7 +11,4 @@ If you have any further questions, suggestions or requests, please use the discu
 
 ## changelog
 
-- add gpio check (check for duplicates and set initial values if gpio=0)
-- set initial log level to "Debug"
-- update mathieucarbou/AsyncTCP @ 3.3.1
-- update mathieucarbou/ESPAsyncWebServer @ 3.4.3
+- extend internal check if cc1101 is connected to avoid infinite-loop #2
