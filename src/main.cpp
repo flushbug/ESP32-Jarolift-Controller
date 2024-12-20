@@ -149,4 +149,6 @@ void loop() {
   }
 
   main_reboot = false; // reset reboot flag
+
+  processMessageQueue();
 }

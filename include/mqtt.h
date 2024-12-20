@@ -21,3 +21,6 @@ const char *mqttGetLastError();
 bool mqttIsConnected();
 
 void mqtt_send_percent_closed_state(int channelNum, int percent, String command);
+
+void addToQueue(const char* topic, const char* payload);
+void processMessageQueue();

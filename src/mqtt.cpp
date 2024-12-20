@@ -8,6 +8,8 @@
 
 /* D E C L A R A T I O N S ****************************************************/
 #define PAYLOAD_LEN 512
+#define MAX_QUEUE_SIZE 10
+
 struct s_MqttMessage {
   char topic[512];
   char payload[PAYLOAD_LEN];
@@ -25,6 +27,9 @@ static char lastError[64] = "---";
 static int mqtt_retry = 0;
 static muTimer mqttReconnectTimer;
 static s_MqttMessage msgCpy;
+static s_MqttMessage messageQueue[MAX_QUEUE_SIZE];
+static int queueHead = 0;
+static int queueTail = 0;
 
 /**
  * *******************************************************************
@@ -305,4 +310,56 @@ void processMqttMessage() {
     mqttPublish(addTopic("/message"), "unknown topic", false);
     MY_LOGI(TAG, "unknown topic received");
   }
+}
+
+/**
+ * *******************************************************************
+ * @brief   Fügt eine Nachricht zur Queue hinzu
+ * @param   topic, payload
+ * @return  none
+ * *******************************************************************/
+void addToQueue(const char* topic, const char* payload) {
+    int nextHead = (queueHead + 1) % MAX_QUEUE_SIZE;
+    
+    if (nextHead != queueTail) {  // Queue ist nicht voll
+        strncpy(messageQueue[queueHead].topic, topic, sizeof(messageQueue[queueHead].topic) - 1);
+        strncpy(messageQueue[queueHead].payload, payload, sizeof(messageQueue[queueHead].payload) - 1);
+        // Null-Terminierung sicherstellen
+        messageQueue[queueHead].topic[sizeof(messageQueue[queueHead].topic) - 1] = '\0';
+        messageQueue[queueHead].payload[sizeof(messageQueue[queueHead].payload) - 1] = '\0';
+        queueHead = nextHead;
+    }
+}
+
+/**
+ * *******************************************************************
+ * @brief   Verarbeitet die Queue
+ * @param   none
+ * @return  none
+ * *******************************************************************/
+void processMessageQueue() {
+    while (queueTail != queueHead) {
+        // Nachricht kopieren und verarbeiten
+        strncpy(msgCpy.topic, messageQueue[queueTail].topic, sizeof(msgCpy.topic) - 1);
+        strncpy(msgCpy.payload, messageQueue[queueTail].payload, sizeof(msgCpy.payload) - 1);
+        // Null-Terminierung sicherstellen
+        msgCpy.topic[sizeof(msgCpy.topic) - 1] = '\0';
+        msgCpy.payload[sizeof(msgCpy.payload) - 1] = '\0';
+        
+        processMqttMessage();
+        
+        // Kurze Pause zwischen den Befehlen
+        delay(50);
+        
+        queueTail = (queueTail + 1) % MAX_QUEUE_SIZE;
+    }
+}
+
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+    char payloadStr[128];
+    // Payload in String umwandeln
+    strlcpy(payloadStr, (char*)payload, min(length + 1, sizeof(payloadStr)));
+    
+    // Zur Queue hinzufügen statt direkter Verarbeitung
+    addToQueue(topic, payloadStr);
 }
